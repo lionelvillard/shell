@@ -37,7 +37,6 @@ const doInstall = (_a, _b, fullArgv, _1, rawCommandString, _2, argvWithoutOption
     const pluginHome = path.join(app.getPath('userData'), 'plugins', name)
     fs.mkdirpSync(pluginHome)
     debug(`install plugin ${name} in ${pluginHome}`)
-    console.log(pluginHome)
 
     return new Promise((resolve, reject) => {
         exec(`npm install ${name} --prod --node-save --no-shrinkwrap`, { cwd: pluginHome }, (error, stdout, stderr) => {
@@ -46,7 +45,6 @@ const doInstall = (_a, _b, fullArgv, _1, rawCommandString, _2, argvWithoutOption
 
             // run compile.js
             const compilejsHome = path.join(__dirname, '..', '..', '..', '..', 'dist')
-            console.log(compilejsHome)
             exec(`./compile.js -d ${pluginHome}/node_modules/${name}`, { cwd: compilejsHome }, (error, stdout, stderr) => {
                 if (error)
                     return reject(error)
