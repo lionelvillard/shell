@@ -13,11 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const debug = require('debug')('plugins')
+
+/**
+ * Format usage message
+ *
+ */
+const usage = cmd => `List installed shell plugins
+
+\tplugin list`
+
+const doList = (_a, _b, fullArgv, _1, rawCommandString, _2, argvWithoutOptions, dashOptions) => {
+    const path = require('path')
+    const fs = require('fs-extra')
+    const { app } = require('electron').remote
+    const pluginHome = path.join(app.getPath('userData'), 'plugins')
+
+    const dirs = fs.readdirSync(pluginHome)
+    return dirs.join('\n')
+}
 
 module.exports = (commandTree, prequire) => {
-    commandTree.subtree('/plugin', { docs: 'Manage shell plugins' })
-
-    require('./lib/install')(commandTree, prequire)
-    require('./lib/list')(commandTree, prequire)
-    require('./lib/remove')(commandTree, prequire)
+    commandTree.listen('/plugin/list', doList, { docs: 'List install shell plugins' })
 }

@@ -41,7 +41,7 @@ const doInstall = (_a, _b, fullArgv, _1, rawCommandString, _2, argvWithoutOption
     return new Promise((resolve, reject) => {
         exec(`npm install ${name} --prod --no-save --no-shrinkwrap`, { cwd: pluginHome }, (error, stdout, stderr) => {
             if (error) {
-                fs.remove(pluginHome)
+                fs.removeSync(pluginHome)
                 return reject(error)
             }
 
@@ -49,7 +49,7 @@ const doInstall = (_a, _b, fullArgv, _1, rawCommandString, _2, argvWithoutOption
             const compilejsHome = path.join(__dirname, '..', '..', '..', '..', 'dist')
             exec(`./compile.js -d ${pluginHome}/node_modules/${name}`, { cwd: compilejsHome }, (error, stdout, stderr) => {
                 if (error) {
-                    fs.remove(pluginHome)
+                    fs.removeSync(pluginHome)
                     return reject(error)
                 }
 
