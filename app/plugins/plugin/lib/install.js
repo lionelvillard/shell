@@ -39,15 +39,19 @@ const doInstall = (_a, _b, fullArgv, _1, rawCommandString, _2, argvWithoutOption
     debug(`install plugin ${name} in ${pluginHome}`)
 
     return new Promise((resolve, reject) => {
-        exec(`npm install ${name} --prod --node-save --no-shrinkwrap`, { cwd: pluginHome }, (error, stdout, stderr) => {
-            if (error)
+        exec(`npm install ${name} --prod --no-save --no-shrinkwrap`, { cwd: pluginHome }, (error, stdout, stderr) => {
+            if (error) {
+                fs.remove(pluginHome)
                 return reject(error)
+            }
 
             // run compile.js
             const compilejsHome = path.join(__dirname, '..', '..', '..', '..', 'dist')
             exec(`./compile.js -d ${pluginHome}/node_modules/${name}`, { cwd: compilejsHome }, (error, stdout, stderr) => {
-                if (error)
+                if (error) {
+                    fs.remove(pluginHome)
                     return reject(error)
+                }
 
                 // TODO: ask to reload
 
